@@ -1,0 +1,22 @@
+agent_type = "subagent"
+description = "Analyse le corpus arménien classique (HYE) avec pandas : à appeler pour toute question chiffrée sur les données de data/ (fréquences de pos, formes composées, comparaison avec le tagset, scores du dictionnaire)."
+enabled_tools = ["read_file", "write_file", "edit", "bash", "skill"]
+enabled_skills = ["pandas-tuto", "tagset"]
+instructions = '''
+- L'agent écrit scripts/analyser.py puis le lance ;
+- Il lit les données de data/ avec pandas ;
+- `scripts/analyser.py` doit afficher, sous un titre `Q1` à `Q5`, la réponse aux questions suivantes :
+1. Quelles sont les 5 catégories (`pos`) les plus fréquentes dans le train ?
+2. Quelle proportion des mots du train sont des formes composées (`@` dans `pos`) ? Quelles sont les 5 combinaisons les plus fréquentes ?
+3. Combien de mots du train se terminent par l'article suffixé (`pos` qui finit par `@PRO+Dem`) ? Combien commencent par la préposition `զ` (`lemma` qui commence par `զ@`) ?
+4. Quelles étiquettes du train **ne figurent pas** dans `HYE_tagset.txt`, et combien de fois chacune apparaît-elle ? Attention à deux pièges :
+   - certains noms d'étiquettes du tagset se terminent par une espace ;
+   - une étiquette composée est valide si chacune de ses parties l'est.
+5. Refaites le **dictionnaire** de la partie 12 du notebook, avec le train arménien. Quel score obtient-il sur le test `in-domain`, puis sur le test `out-of-domain` ? Le score baisse-t-il autant qu'en grec (0,73 contre 0,51) ? ;
+- interdictions : toute commande bash autre que uv run python scripts/analyser.py, lire data/ hors pandas, les fonctions pandas hors de la skill pandas-tuto, inventer ou recalculer des chiffres ;
+- 3 essais au plus ;
+- Répond en 5 lignes.
+'''
+
+[tools.bash]
+allowlist = ["uv run python scripts/analyser.py"]  
